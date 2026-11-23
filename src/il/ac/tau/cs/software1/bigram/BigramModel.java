@@ -1,7 +1,9 @@
 package il.ac.tau.cs.software1.bigram;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Scanner;
 
 public class BigramModel {
     public static final int MAX_VOCABULARY_SIZE = 14500;
@@ -79,8 +81,31 @@ public class BigramModel {
      * @post: mBigramCounts = prev(mBigramCounts)
      */
     public String[] buildVocabularyIndex(String fileName) throws IOException { // Question 1
-        // TODO: implement
-        return null;
+        File text = new File(fileName); // find the given file
+        StringBuilder vocabString = new StringBuilder(""); //will be converted into vocab array
+        int i = 0; // to make sure the vocab is not bigger than MAX
+
+        try (Scanner wordScanner = new Scanner(text)) { //reading words from text, closing in the end
+            wordScanner.useDelimiter("\\W+"); // ignore spaces, commas and etc.
+
+            while (wordScanner.hasNext() && i < MAX_VOCABULARY_SIZE) {
+                String word = normalizeWord(wordScanner.next()); // check for word in dict.
+
+                if (word != null && !word.equals(SOME_NUM)){
+                    if (vocabString.indexOf(" " + word + " ") == -1 ) {
+                    vocabString.append(" ").append(word).append(" "); // adding space to enable seperation when converting to array
+                    i++; // if increased vocab, counts
+                    }
+                }
+            }
+        }
+        String[] vocab = vocabString.toString().trim().split("\\s+"); //convert to string then to array
+        if (vocab.length != 0) {
+            return vocab;
+        }
+        else{
+            return null;
+        }
     }
 
     /*

@@ -85,13 +85,17 @@ public class BigramModel {
         StringBuilder vocabString = new StringBuilder(""); //will be converted into vocab array
         int i = 0; // to make sure the vocab is not bigger than MAX
 
+        if (text.length() == 0) {
+            return null;
+        }
+
         try (Scanner wordScanner = new Scanner(text)) { //reading words from text, closing in the end
-            wordScanner.useDelimiter("\\W+"); // ignore spaces, commas and etc.
+            wordScanner.useDelimiter("[^a-zA-Z0-9']+"); // ignore spaces, commas and etc. but not '
 
             while (wordScanner.hasNext() && i < MAX_VOCABULARY_SIZE) {
                 String word = normalizeWord(wordScanner.next()); // check for word in dict.
 
-                if (word != null && !word.equals(SOME_NUM)){
+                if (word != null){
                     if (vocabString.indexOf(" " + word + " ") == -1 ) {
                     vocabString.append(" ").append(word).append(" "); // adding space to enable seperation when converting to array
                     i++; // if increased vocab, counts
@@ -100,12 +104,7 @@ public class BigramModel {
             }
         }
         String[] vocab = vocabString.toString().trim().split("\\s+"); //convert to string then to array
-        if (vocab.length != 0) {
             return vocab;
-        }
-        else{
-            return null;
-        }
     }
 
     /*

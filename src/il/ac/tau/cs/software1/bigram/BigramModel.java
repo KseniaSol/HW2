@@ -142,8 +142,8 @@ public class BigramModel {
             }
             }
         }
-        return counts;
     }
+    return counts;
     }
 
     /*

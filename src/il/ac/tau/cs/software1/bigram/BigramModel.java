@@ -104,7 +104,7 @@ public class BigramModel {
             }
         }
         String[] vocab = vocabString.toString().trim().split("\\s+"); //convert to string then to array
-            return vocab;
+        return vocab;
     }
 
     /*
@@ -112,8 +112,41 @@ public class BigramModel {
      * @post: mBigramCounts = prev(mBigramCounts)
      */
     public int[][] buildCountsArray(String fileName, String[] vocabulary) throws IOException { // Question 2
-        // TODO: implement
-        return null;
+        File text = new File(fileName);
+
+        if (text.length() == 0) {
+            return null;
+        }
+        
+        int n = vocabulary.length;
+        int[][] counts = new int[n][n];
+        
+        try (Scanner lineScanner = new Scanner(text)){
+
+        while (lineScanner.hasNextLine()) { // read by line
+            String line = lineScanner.nextLine();
+
+            try (Scanner wordScanner = new Scanner(line)) {
+                wordScanner.useDelimiter("\\s+"); //ignore spaces
+                String nextWord = normalizeWord(wordScanner.next());
+                int nextWordIndex = findIndex(vocabulary, nextWord);
+
+                while (wordScanner.hasNext()) {
+                    nextWord = normalizeWord(wordScanner.next());
+
+                    int wordIndex = nextWordIndex;
+                    nextWordIndex = findIndex(vocabulary, nextWord);
+
+                    if (wordIndex != ELEMENT_NOT_FOUND &&
+                        nextWordIndex != ELEMENT_NOT_FOUND) {
+
+                        counts[wordIndex][nextWordIndex]++;
+                    }
+            }
+            }
+        }
+        return counts;
+    }
     }
 
     /*

@@ -204,7 +204,7 @@ public class BigramModel {
         try (Scanner lineScanner = new Scanner(countsFile)){
             while (lineScanner.hasNext()){
                 String line = lineScanner.nextLine();
-                
+
                 if (!line.isEmpty()){
                     int comma = line.indexOf(',');
                     int colon = line.indexOf(':');
@@ -224,8 +224,34 @@ public class BigramModel {
      * @post: if sentence is probable, according to the model, $ret = true, else, $ret = false
      */
     public boolean isLegalSentence(String sentence) { // Question 5
-        // TODO: implement
-        return false;
+        if (sentence.equals("")){
+            return true;
+        }
+        String[] sArray = sentence.toString().trim().split("\\s+");
+
+        if (sArray.length == 1){
+            for (int i = 0; i < mVocabulary.length; i++) {
+                if (mVocabulary[i].equals(sentence)) {
+                    return true;
+                    }
+                }
+                return false;
+            }
+        /// otherwise, num of words >=2
+        for (int i = 0 ; i < sArray.length - 1 ; i++){
+            String word1 = sArray[i];
+            String word2 = sArray[i+1];
+            int index1 = findIndex(mVocabulary, word1);
+            int index2 = findIndex(mVocabulary, word2);
+
+            if (index1 < 0 || index2 < 0){ // word not found
+                return false;
+            }
+            if (mBigramCounts[index1][index2] == 0){
+                return false;
+            }
+        }
+        return true;
     }
 
     ///////////////////////////////////////////////////////////////////////////

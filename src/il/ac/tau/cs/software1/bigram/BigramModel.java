@@ -133,13 +133,10 @@ public class BigramModel {
 
                 while (wordScanner.hasNext()) {
                     nextWord = normalizeWord(wordScanner.next());
-
                     int wordIndex = nextWordIndex;
                     nextWordIndex = findIndex(vocabulary, nextWord);
 
-                    if (wordIndex != ELEMENT_NOT_FOUND &&
-                        nextWordIndex != ELEMENT_NOT_FOUND) {
-
+                    if (wordIndex != ELEMENT_NOT_FOUND && nextWordIndex != ELEMENT_NOT_FOUND) {
                         counts[wordIndex][nextWordIndex]++;
                     }
             }
